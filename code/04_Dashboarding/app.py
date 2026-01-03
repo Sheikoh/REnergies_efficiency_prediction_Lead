@@ -68,14 +68,14 @@ def get_daily_tch_solaire_regional(df_reg: pd.DataFrame) -> pd.DataFrame:
 @st.cache_data
 def load_data():
     # Datasets
-    df_nat = pd.read_csv("https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Annuel-Definitif.csv")
+    df_nat = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Annuel-Definitif.csv")
     df_nat_prep = prepare_df(df_nat, zone="France")
 
     return df_nat_prep
 
 def load_regional_data():
     # Datasets
-    df_reg = pd.read_csv("https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Auvergne-Rhone-Alpes.csv")
+    df_reg = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Auvergne-Rhone-Alpes.csv")
     df_reg_prep = prepare_df(df_reg, zone="Auvergne-Rhône-Alpes")
 
     return df_reg_prep
@@ -108,9 +108,9 @@ def load_api_data(url, data_type):
         logging.error("Failure after {max_retries} retries")
 
 def load_rte_data():
-    rte_last_download_response = requests.get("https://renergies99-api-renergy.hf.space/rte_last_download")
+    rte_last_download_response = requests.get("https://renergies99lead-api-renergy-lead.hf.space/rte_last_download")
     if rte_last_download_response.json() != datetime.now().strftime("%Y-%m-%d"):
-        load_api_data("https://renergies99-api-renergy.hf.space/load_rte_data", "RTE")
+        load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_rte_data", "RTE")
 
     return load_regional_data()
 
@@ -121,7 +121,7 @@ def load_predictions_file() -> pd.DataFrame:
     - le nom de la colonne de prédiction si différent
     """ 
     # WARNING : A adapter avec le chemin vers le fichier sur le S3
-    df_pred = pd.read_csv("https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prediction/pred_tch_solaire_rhone_alpes.csv")
+    df_pred = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prediction/pred_tch_solaire_rhone_alpes.csv")
 
     df_pred["Date"] = pd.to_datetime(df_pred["Date"], errors="coerce")
 
@@ -141,23 +141,23 @@ def load_predictions_file() -> pd.DataFrame:
     return df_pred[["Date", COL_TCH, "type"]]
 
 def call_predict():
-    predi_last_download_response = requests.get("https://renergies99-api-renergy.hf.space/predi_last_download")
+    predi_last_download_response = requests.get("https://renergies99lead-api-renergy-lead.hf.space/predi_last_download")
     if predi_last_download_response.json() == datetime.now().strftime("%Y-%m-%d"):
         return "Prediction data is already downloaded today"
 
     urls = [
-        "https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/solar/predi_data.csv",
-        "https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/openweathermap/openweathermap_forecasts.csv"
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/solar/predi_data.csv",
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/openweathermap/openweathermap_forecasts.csv"
     ]
 
     payload = {"urls": urls}
 
-    data = requests.post("https://renergies99-api-renergy.hf.space/prep_data", json=payload)
+    data = requests.post("https://renergies99lead-api-renergy-lead.hf.space/prep_data", json=payload)
     json_data = data.json()
     print("json_data", json_data)
 
-    response = requests.post("https://renergies99-api-renergy.hf.space/predict")
-    print("zzzzzzzzzzzzzzz", response.content)
+    response = requests.post("https://renergies99lead-api-renergy-lead.hf.space/predict")
+    print("response.content", response.content)
     
 
 # Principes de navigation
@@ -173,9 +173,9 @@ df_nat = load_data()
 
 df_reg = load_rte_data()
 
-#load_api_data("https://renergies99-api-renergy.hf.space/load_rte_data", "RTE")
-load_api_data("https://renergies99-api-renergy.hf.space/load_openweathermap_forecasts", "OPENWEATHERMAP FORECASTS")
-load_api_data("https://renergies99-api-renergy.hf.space/load_solar_data", "SOLAR FORECAST")
+#load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_rte_data", "RTE")
+load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_openweathermap_forecasts", "OPENWEATHERMAP FORECASTS")
+load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_solar_data", "SOLAR FORECAST")
 
 call_predict()
 

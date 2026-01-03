@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 
 objective = 'historic'
-s3 = 'https://renergies99-bucket.s3.eu-west-3.amazonaws.com/'
+s3 = 'https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/'
 folder = 'public/solar/'
 variable = {
     'predi': {
@@ -43,7 +43,7 @@ for single_date in daterange(start_date, end_date):
 if stored_data.shape[0] > 0:
     solar_data = pd.concat([stored_data, solar_data])
 
-# url = "https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/solar/raw_solar_data.csv"
+# url = "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/solar/raw_solar_data.csv"
 #to_s3(solar_data)
 #storage of the data in a csv
 print(solar_data.head())

@@ -14,7 +14,7 @@ last_download_filename = "rte_last_download"
 
 API_KEY_S3 = os.environ["AWS_ACCESS_KEY_ID"]
 API_SECRET_KEY_S3 = os.environ["AWS_SECRET_ACCESS_KEY"]
-bucket = "renergies99-bucket"
+bucket = "renergies99-lead-bucket"
 
 def s3_cred():
     load_dotenv()
@@ -95,10 +95,10 @@ def fill_2024_columns(df):
 
 def get_previous_rte_data():
     xls_list = [
-        "https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2021.xls",
-        "https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2022.xls",
-        "https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2023.xls",
-        "https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2024.xls"
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2021.xls",
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2022.xls",
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2023.xls",
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2024.xls"
     ]
 
     df_array = []
@@ -145,7 +145,7 @@ def rte_df_to_csv(df):
     )
 
     df.to_csv(
-        f"s3://renergies99-bucket/public/prod/{final_csv_filename}",
+        f"s3://renergies99-lead-bucket/public/prod/{final_csv_filename}",
         index=False,
         storage_options={
             "key": API_KEY_S3,

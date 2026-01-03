@@ -28,7 +28,7 @@ last_download_filename = f"openweathermap_last_download"
 
 API_KEY_S3 = os.environ["AWS_ACCESS_KEY_ID"]
 API_SECRET_KEY_S3 = os.environ["AWS_SECRET_ACCESS_KEY"]
-bucket = "renergies99-bucket"
+bucket = "renergies99-lead-bucket"
 
 class Owm:
 
@@ -235,7 +235,7 @@ def load_openweathermap_data(cities_coord, file_basename="openweathermap_forecas
         logging.info(f"write data to : {filename}")
 
         df.to_csv(
-            f"s3://renergies99-bucket/public/openweathermap/{filename}",
+            f"s3://renergies99-lead-bucket/public/openweathermap/{filename}",
             index=False,
             storage_options={
                 "key": API_KEY_S3,
