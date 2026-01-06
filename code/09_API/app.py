@@ -21,7 +21,7 @@ from io import StringIO
 bucket = af.session_boto()
 
 # Set tracking URI to your Hugging Face application
-mlflow.set_tracking_uri("https://renergies99-mlflow.hf.space/")
+mlflow.set_tracking_uri("https://renergies99lead-mlflow.hf.space/")
 
 # Set your variables for your environment
 EXPERIMENT_NAME="first_weather_models"
@@ -143,14 +143,14 @@ async def predict():
 
     #print(type(predictionFeatures), predictionFeatures)
     # Read data 
-    data = pd.read_csv("https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prediction/data_compile_predi.csv")
+    data = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prediction/data_compile_predi.csv")
     #data = pd.read_json(StringIO(predictionFeatures), orient='index', dtype=False)
 
     #data = pd.DataFrame([predictionFeatures])
     #data = pd.DataFrame.from_dict(predictionFeatures, orient="index")
 
     # Log model from mlflow 
-    run = 'dd977154007f474993f35e5c5d8361b9' #Popular_Panda
+    run = '9d7682ec0624493894782d0911429b1a' #Popular_Panda
     logged_model = f'runs:/{run}/model'
     # logged_model = 'runs:/9c9501dd806242abaf63d6daf0fd2ac0/pipeline_model'
     
@@ -161,7 +161,7 @@ async def predict():
     prediction = loaded_model.predict(data)
     artifact_uri = mlflow.get_run(run).info.artifact_uri
     errors = mlflow.artifacts.load_dict(artifact_uri + "/error.json")
-    # errors = mlflow.artifacts.load_dict('s3://renergies99-mlflow/5/9c9501dd806242abaf63d6daf0fd2ac0/artifacts/pipeline_model/error.json')
+    # errors = mlflow.artifacts.load_dict('s3://renergies99-lead-mlflow/5/9c9501dd806242abaf63d6daf0fd2ac0/artifacts/pipeline_model/error.json')
     errors_df = pd.DataFrame(errors)
     error_list = []
     for predi in prediction.tolist():
@@ -174,7 +174,7 @@ async def predict():
                 "Error": error_list}
     resp_df = pd.DataFrame(response, index=list(range(len(response["TCH_solaire_pred"]))))
 #    try:
-#        hist_df = pd.read_csv('https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prediction/predi.csv')
+#        hist_df = pd.read_csv('https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prediction/predi.csv')
 #    except: 
 #        all_predi = resp_df   
 #    else:

@@ -1,6 +1,6 @@
 #This file gives the console commands to link the repo to the hugging face space
 
-git remote add hf_REnergy https://huggingface.co/spaces/REnergies99/API_REnergy
+git remote add hf_REnergy https://huggingface.co/spaces/REnergies99Lead/API_REnergy_Lead
 # to be modified
 
 #initiate the repo hugging_face. 

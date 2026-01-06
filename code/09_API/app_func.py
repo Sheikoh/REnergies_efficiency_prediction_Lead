@@ -19,7 +19,7 @@ def session_boto():
     API_KEY_S3 = os.environ["AWS_ACCESS_KEY_ID"]
     API_SECRET_KEY_S3 = os.environ["AWS_SECRET_ACCESS_KEY"]
 
-    bucket_name = "renergies99-bucket"
+    bucket_name = "renergies99-lead-bucket"
     
 
     # Liste des dossiers locaux à uploader

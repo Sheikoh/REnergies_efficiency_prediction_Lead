@@ -7,7 +7,7 @@ load_dotenv()
 API_KEY_S3 = os.environ["API_KEY_S3"]
 API_SECRET_KEY_S3 = os.environ["API_SECRET_KEY_S3"]
 
-bucket_name = "renergies99-bucket"
+bucket_name = "renergies99-lead-bucket"
 s3_prefix = "public" 
 
 # Liste des dossiers locaux à uploader
