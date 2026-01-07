@@ -128,53 +128,53 @@ def iqr_params(serie, iqr_factor=1.5):
     return (lower_iqr, upper_iqr)
 
 
-def detect_outliers(df, z_thresh=3, iqr_factor=1.5, quantile_bounds=(0.05, 0.95)):
-    """
-    Detect outliers in numerical columns using three methods:
-    IQR, Z-score and Quantile thresholds.
-    Returns a DataFrame with outlier counts per column and per method.
-    """
-    numeric_cols = df.select_dtypes(include='number').columns
-    result = {}
+# def detect_outliers(df, z_thresh=3, iqr_factor=1.5, quantile_bounds=(0.05, 0.95)):
+#     """
+#     Detect outliers in numerical columns using three methods:
+#     IQR, Z-score and Quantile thresholds.
+#     Returns a DataFrame with outlier counts per column and per method.
+#     """
+#     numeric_cols = df.select_dtypes(include='number').columns
+#     result = {}
 
-    for col in numeric_cols:
-        temp_col = df[col].dropna()
+#     for col in numeric_cols:
+#         temp_col = df[col].dropna()
 
-        # IQR
-        lower_iqr, upper_iqr = iqr_params(temp_col, iqr_factor=iqr_factor)
-        outliers_iqr = temp_col[(temp_col < lower_iqr) | (temp_col > upper_iqr)]
+#         # IQR
+#         lower_iqr, upper_iqr = iqr_params(temp_col, iqr_factor=iqr_factor)
+#         outliers_iqr = temp_col[(temp_col < lower_iqr) | (temp_col > upper_iqr)]
 
-        # Z-score
-        z_scores = zscore(temp_col)
-        outliers_z = temp_col[abs(z_scores) > z_thresh]
+#         # Z-score
+#         z_scores = zscore(temp_col)
+#         outliers_z = temp_col[abs(z_scores) > z_thresh]
 
-        # Quantiles
-        q_low, q_high = temp_col.quantile(quantile_bounds)
-        outliers_quantile = temp_col[(temp_col < q_low) | (temp_col > q_high)]
+#         # Quantiles
+#         q_low, q_high = temp_col.quantile(quantile_bounds)
+#         outliers_quantile = temp_col[(temp_col < q_low) | (temp_col > q_high)]
 
-        result[col] = {
-            "outliers_z": len(outliers_z),
-            "outliers_iqr": len(outliers_iqr),
-            "outliers_quantile": len(outliers_quantile)
-        }
-    return pd.DataFrame(result).T
+#         result[col] = {
+#             "outliers_z": len(outliers_z),
+#             "outliers_iqr": len(outliers_iqr),
+#             "outliers_quantile": len(outliers_quantile)
+#         }
+#     return pd.DataFrame(result).T
 
-def get_columns_with_outliers(df, method="iqr", z_thresh=3, iqr_factor=1.5, quantile_bounds=(0.05, 0.95)):
-    """
-    Returns a list of columns that have outliers according to the chosen method.
-    Parameters:
-    - df: dataframe
-    - method: "z", "iqr", or "quantile"
-    - threshold (z_thresh, iqr_factor or quantile_bounds)
-    Returns:
-    - list of columns with at least one outlier according to the chosen method
-    """
-    outliers_df = detect_outliers(df, z_thresh=z_thresh, iqr_factor=iqr_factor, quantile_bounds=quantile_bounds)
-    method_col = f"outliers_{method}"
-    if method_col not in outliers_df.columns:
-        raise ValueError(f"Invalid method '{method}'. Choose from: z, iqr, quantile")
+# def get_columns_with_outliers(df, method="iqr", z_thresh=3, iqr_factor=1.5, quantile_bounds=(0.05, 0.95)):
+#     """
+#     Returns a list of columns that have outliers according to the chosen method.
+#     Parameters:
+#     - df: dataframe
+#     - method: "z", "iqr", or "quantile"
+#     - threshold (z_thresh, iqr_factor or quantile_bounds)
+#     Returns:
+#     - list of columns with at least one outlier according to the chosen method
+#     """
+#     outliers_df = detect_outliers(df, z_thresh=z_thresh, iqr_factor=iqr_factor, quantile_bounds=quantile_bounds)
+#     method_col = f"outliers_{method}"
+#     if method_col not in outliers_df.columns:
+#         raise ValueError(f"Invalid method '{method}'. Choose from: z, iqr, quantile")
     
-    return outliers_df.index[outliers_df[method_col] > 0].tolist()
+#     return outliers_df.index[outliers_df[method_col] > 0].tolist()
 
 def remove_outliers(
     df, target, method="iqr",

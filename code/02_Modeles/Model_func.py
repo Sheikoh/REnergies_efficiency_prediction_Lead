@@ -1,9 +1,6 @@
 import pandas as pd
 #from func_utils.utils import save_tocsv
 
-import plotly.express as px
-import seaborn as sns
-import matplotlib.pyplot as plt
 import json
 
 from sklearn.model_selection import train_test_split
