@@ -151,12 +151,19 @@ async def predict():
     #data = pd.DataFrame.from_dict(predictionFeatures, orient="index")
 
     # Log model from mlflow 
-    run = 'ce62ebaafd8c46fdb939ef6e5b0bfc7e' #marvelous-squid-316
+    #run = 'ce62ebaafd8c46fdb939ef6e5b0bfc7e' #marvelous-squid-316
     #logged_model = f'runs:/{run}/model'
-    logged_model = "s3://renergies99-lead-mlflow/4/models/m-07069184939b483ab341754dbdb501be/artifacts"
-    
+    #logged_model = "s3://renergies99-lead-mlflow/4/models/m-07069184939b483ab341754dbdb501be/artifacts"
 
+    # Log model from mlflow
+    # MLFLOW_TRACKING_URI = os.environ["MLFLOW_TRACKING_URI"]
+    # mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+
+    logged_model = "models:/SolarProdModel@production"
     # logged_model = 'runs:/9c9501dd806242abaf63d6daf0fd2ac0/pipeline_model'
+    #run = 'ce62ebaafd8c46fdb939ef6e5b0bfc7e' #marvelous-squid-316
+    #logged_model = f'runs:/{run}/model'
+    #logged_model = "s3://renergies99-lead-mlflow/4/models/m-07069184939b483ab341754dbdb501be/artifacts"
     
     
     # # Load model as a PyFuncModel.
