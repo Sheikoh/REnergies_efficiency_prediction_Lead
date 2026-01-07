@@ -4,7 +4,7 @@ pydantic
 typing 
 pandas 
 openpyxl 
-mlflow
+mlflow==3.6.0
 boto3 
 scikit-learn
 python-multipart

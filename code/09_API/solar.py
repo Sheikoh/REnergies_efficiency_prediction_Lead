@@ -82,7 +82,7 @@ def to_boto(bucket, folder, key, file):
     bucket.put_object(
         Body = file,
         Key = folder+key,
-        ACL = 'public-read-write'
+        #ACL = 'public-read-write'
     )
 
 #----Extractiont Prediction data------

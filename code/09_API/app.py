@@ -23,8 +23,9 @@ bucket = af.session_boto()
 # Set tracking URI to your Hugging Face application
 mlflow.set_tracking_uri("https://renergies99lead-mlflow.hf.space/")
 
+# TODO: Remove mlflow at startup ?
 # Set your variables for your environment
-EXPERIMENT_NAME="first_weather_models"
+EXPERIMENT_NAME="Default"
 # Set experiment's info 
 mlflow.set_experiment(EXPERIMENT_NAME)
 
@@ -137,7 +138,7 @@ async def predict():
     """
 
     # Set your variables for your environment
-    EXPERIMENT_NAME="all_columns_models"
+    EXPERIMENT_NAME="REnergie-lead"
     # Set experiment's info 
     mlflow.set_experiment(EXPERIMENT_NAME)
 
@@ -150,8 +151,11 @@ async def predict():
     #data = pd.DataFrame.from_dict(predictionFeatures, orient="index")
 
     # Log model from mlflow 
-    run = '9d7682ec0624493894782d0911429b1a' #Popular_Panda
-    logged_model = f'runs:/{run}/model'
+    run = 'ce62ebaafd8c46fdb939ef6e5b0bfc7e' #marvelous-squid-316
+    #logged_model = f'runs:/{run}/model'
+    logged_model = "s3://renergies99-lead-mlflow/4/models/m-07069184939b483ab341754dbdb501be/artifacts"
+    
+
     # logged_model = 'runs:/9c9501dd806242abaf63d6daf0fd2ac0/pipeline_model'
     
     
@@ -159,14 +163,19 @@ async def predict():
     loaded_model = mlflow.pyfunc.load_model(logged_model)
     print('loaded model')
     prediction = loaded_model.predict(data)
+
+    """
     artifact_uri = mlflow.get_run(run).info.artifact_uri
     errors = mlflow.artifacts.load_dict(artifact_uri + "/error.json")
     # errors = mlflow.artifacts.load_dict('s3://renergies99-lead-mlflow/5/9c9501dd806242abaf63d6daf0fd2ac0/artifacts/pipeline_model/error.json')
     errors_df = pd.DataFrame(errors)
-    error_list = []
+    
     for predi in prediction.tolist():
         error_list.append(af.get_std(predi, errors_df))
+    """
     print(prediction)
+
+    error_list = [0, 0, 0]
 
     # Format response
     response = {"Date": data['Date'],

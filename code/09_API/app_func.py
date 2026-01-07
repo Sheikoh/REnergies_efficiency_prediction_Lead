@@ -41,8 +41,9 @@ def to_boto(bucket, predi, key):
     
     bucket.put_object(
         Body = predi,
-        Key = s3_prefix+key,
-        ACL = 'public-read-write'
+        Key = s3_prefix+key
+        # ,
+        # ACL = 'public-read-write'
     )
 
 def get_std(x, table):
