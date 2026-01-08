@@ -6,6 +6,12 @@ from datetime import datetime
 from dotenv import load_dotenv
 import os
 import boto3
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+from fastapi.responses import StreamingResponse
+import csv
+import io
+
 
 load_dotenv()
 
@@ -14,6 +20,8 @@ last_download_filename = "rte_last_download"
 
 API_KEY_S3 = os.environ["AWS_ACCESS_KEY_ID"]
 API_SECRET_KEY_S3 = os.environ["AWS_SECRET_ACCESS_KEY"]
+DATABASE_URL = os.environ["DATABASE_URL"]
+
 bucket = "renergies99-lead-bucket"
 
 def s3_cred():
@@ -161,6 +169,52 @@ def rte_df_to_csv(df):
         Body=getNow().encode("utf-8")
     )
 
+def rte_data(deb, fin, type):
+    engine = create_engine(DATABASE_URL)
+
+    def generate_csv():
+        with engine.connect() as conn:
+            columns = conn.execute(
+                text("""
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_schema = 'public'
+                  AND table_name = :table
+                """),
+                {"table": type}
+            ).fetchall()
+            columns = [col[0] for col in columns]
+
+            desired = ["Date", "Heures", "Nucleaire", "Gaz", "Charbon", "Fioul", 
+                   "Hydraulique", "Eolien", "Solaire", "Bioenergies", "Consommation", "Ech__physiques", "Taux_de_Co2"]
+            
+            selected_columns = [col for col in desired if col in columns]
+
+            sql = f"""
+                SELECT {', '.join('"' + c + '"' for c in selected_columns)}
+                FROM public.{type}
+                WHERE EXTRACT(YEAR FROM TO_DATE("Date", 'YYYY-MM-DD')) between :deb and :fin 
+                ORDER BY "Date", "Heures"
+            """
+
+
+
+            result = conn.execute(
+                text(sql),
+                    {"deb": deb, "fin": fin}
+                )
+            
+            writer = csv.writer(io.StringIO())
+            yield ",".join(result.keys()) + "\n"
+
+            for row in result:
+                yield ",".join(map(str, row)) + "\n"
+
+    return StreamingResponse(
+        generate_csv(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={type}.csv"}
+    )
 
 """
 if __name__ == "__main__":
