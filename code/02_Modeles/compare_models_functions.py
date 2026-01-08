@@ -7,26 +7,13 @@ from mlflow import MlflowClient
 ## Pour le DAG après réentrainement du modèle
 
 # Verifier que le MLFLOW_TRACKING_URI est connu (variable d environnement) sinon :
-# load_dotenv()
-# MLFLOW_TRACKING_URI = os.environ["MLFLOW_TRACKING_URI"]
+load_dotenv()
+MLFLOW_TRACKING_URI = os.environ["MLFLOW_TRACKING_URI"]
 
 # Puis TACHE 1 - récupérer le meilleur alias : get_best_alias_by_metric(challenger, production)
 # recupérer l'alias "best_alias"
 # Puis TACHE 2 - mettre le meilleur alias en prod : add_alias_from_alias(old_alias=best_alias, new_alias="production")
 
-
-# # Fonction pour recuperer la MAE des modeles
-# # A executer 2 fois : 
-# # - une fois pour le modele en prod : alias = "production"
-# # - une fois pour le challenger : alias = "challenger"
-# def get_metrics_from_alias(MlflowURI = MLFLOW_TRACKING_URI, registered_model_name="SolarProdModel", alias="production"):
-#     mlflow.set_tracking_uri(MlflowURI)
-#     client = MlflowClient()
-
-#     model = client.get_model_version_by_alias(name=registered_model_name, alias=alias)
-#     run = client.get_run(model.run_id)
-#     mae = run.data.metrics['MAE']
-#     return mae
 
 def get_best_alias_by_metric(alias1, alias2, registered_model_name = "SolarProdModel", MlflowURI = MLFLOW_TRACKING_URI, metric_name='MAE'):
     scores={}
