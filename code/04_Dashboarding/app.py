@@ -65,17 +65,19 @@ def get_daily_tch_solaire_regional(df_reg: pd.DataFrame) -> pd.DataFrame:
     df_daily["type"] = "Historique"
     return df_daily
 
-@st.cache_data
 def load_data():
     # Datasets
-    df_nat = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Annuel-Definitif.csv")
+    #df_nat = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Annuel-Definitif.csv")
+    df_nat = pd.read_csv("https://renergies99lead-api-renergy-lead.hf.space/rte_data?deb=2020&fin=2026&type=rte_national")
+    print("load_data load_data load_data", type(df_nat), df_nat.shape)
     df_nat_prep = prepare_df(df_nat, zone="France")
 
     return df_nat_prep
 
 def load_regional_data():
     # Datasets
-    df_reg = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Auvergne-Rhone-Alpes.csv")
+    #df_reg = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Auvergne-Rhone-Alpes.csv")
+    df_reg = pd.read_csv("https://renergies99lead-api-renergy-lead.hf.space/rte_data?deb=2020&fin=2026&type=rte_regional")
     df_reg_prep = prepare_df(df_reg, zone="Auvergne-Rhône-Alpes")
 
     return df_reg_prep
@@ -403,16 +405,16 @@ if mode == "Descriptif":
     with tab_co2:
         st.subheader("Intensité carbone")
 
-        if "Taux de Co2" not in df_current.columns:
+        if "Taux_de_Co2" not in df_current.columns:
             st.info("La colonne 'Taux de Co2' n'est pas disponible dans ce dataset.")
         else:
-            df_co2 = df_current.dropna(subset=["datetime", "Taux de Co2"])
+            df_co2 = df_current.dropna(subset=["datetime", "Taux_de_Co2"])
 
             if vue == "Comparaison":
                 fig_co2 = px.line(
                     df_co2.sort_values("datetime"),
                     x="datetime",
-                    y="Taux de Co2",
+                    y="Taux_de_Co2",
                     color="zone",
                     title="Évolution du taux de CO₂ (gCO₂/kWh) – France vs Auvergne-Rhône-Alpes"
                 )
@@ -420,7 +422,7 @@ if mode == "Descriptif":
                 fig_co2 = px.line(
                     df_co2.sort_values("datetime"),
                     x="datetime",
-                    y="Taux de Co2",
+                    y="Taux_de_Co2",
                     title=f"Évolution du taux de CO₂ (gCO₂/kWh) – {vue}"
                 )
 
@@ -430,7 +432,7 @@ if mode == "Descriptif":
             st.markdown("### Taux moyen de CO₂ par heure de la journée")
 
             df_hour_co2 = (
-                df_co2.groupby(["hour", "zone"], as_index=False)["Taux de Co2"]
+                df_co2.groupby(["hour", "zone"], as_index=False)["Taux_de_Co2"]
                       .mean()
             )
 
@@ -438,7 +440,7 @@ if mode == "Descriptif":
                 fig_h_co2 = px.line(
                     df_hour_co2,
                     x="hour",
-                    y="Taux de Co2",
+                    y="Taux_de_Co2",
                     color="zone",
                     markers=True,
                     title="Taux moyen de CO₂ par heure – comparaison des zones"
@@ -447,7 +449,7 @@ if mode == "Descriptif":
                 fig_h_co2 = px.bar(
                     df_hour_co2,
                     x="hour",
-                    y="Taux de Co2",
+                    y="Taux_de_Co2",
                     title=f"Taux moyen de CO₂ par heure – {vue}"
                 )
 
@@ -457,12 +459,12 @@ if mode == "Descriptif":
     with tab_ech:
         st.subheader("Échanges physiques")
 
-        # Colonne commune "Ech. physiques"
-        if "Ech. physiques" not in df_current.columns:
+        # Colonne commune "Ech__physiques"
+        if "Ech__physiques" not in df_current.columns:
             st.info("La colonne 'Ech. physiques' n'est pas disponible dans ce dataset.")
         else:
             df_ech = (
-                df_current.groupby(["Date", "zone"], as_index=False)["Ech. physiques"]
+                df_current.groupby(["Date", "zone"], as_index=False)["Ech__physiques"]
                           .mean()
                           .dropna()
             )
@@ -472,7 +474,7 @@ if mode == "Descriptif":
                 fig_ech = px.line(
                     df_ech,
                     x="Date",
-                    y="Ech. physiques",
+                    y="Ech__physiques",
                     color="zone",
                     title="Solde global des échanges physiques (import + / export -)"
                 )
@@ -480,7 +482,7 @@ if mode == "Descriptif":
                 fig_ech = px.line(
                     df_ech,
                     x="Date",
-                    y="Ech. physiques",
+                    y="Ech__physiques",
                     title=f"Solde global des échanges physiques – {vue}"
                 )
 

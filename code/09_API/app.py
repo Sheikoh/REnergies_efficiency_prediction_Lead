@@ -3,7 +3,7 @@ import uvicorn
 import pandas as pd 
 from pydantic import BaseModel
 from typing import Literal, List, Union
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Query
 import joblib
 import app_func as af
 import Model_func as mf
@@ -15,8 +15,13 @@ import openweathermap as owm
 import solar as sol
 from datetime import date, timedelta, datetime
 from io import StringIO
+from enum import Enum
 # data = pd.read_excel("ibm_hr_attrition.xlsx", index_col=0)
 # model = joblib.load("model_ibm")
+
+class RteType(str, Enum):
+    national = "rte_national"
+    regional = "rte_regional"
 
 bucket = af.session_boto()
 
@@ -101,6 +106,9 @@ class Item(BaseModel):
 
 def getNow():
     return datetime.now().strftime("%Y-%m-%d")
+
+def getCurrentYear():
+    return int(datetime.now().strftime("%Y"))
 
 @app.get("/", tags=["Introduction Endpoints"])
 async def index():
@@ -266,6 +274,19 @@ async def rte_last_download():
     Get the date of the last downloaded version of RTE data
     """
     return rte.get_rte_last_download()
+
+@app.get("/rte_data", 
+         tags=["RTE"],
+         summary="RTE data for dashboard")
+async def rte_data(
+    deb: int = Query(2012, description="First year"), 
+    fin: int = Query(getCurrentYear(), description="Last year"), 
+    type: RteType = Query(RteType.national, description="type of data to search (rte_national | rte_regional)")
+    ):
+    """
+    Get RTE data for dashboard
+    """
+    return rte.rte_data(deb, fin, type.value)
 
 @app.get("/load_openweathermap_forecasts", tags=["Openweathermap"])
 async def load_openweathermap_forecasts():
