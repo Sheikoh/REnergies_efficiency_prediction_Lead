@@ -13,9 +13,6 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, r
 from dotenv import load_dotenv
 import os
 
-# from . import func_cleaning as fc
-#from func_utils.utils import save_tocsv
-
 import json
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, FunctionTransformer
