@@ -1,7 +1,7 @@
 # 1. Base Image
 FROM python:3.11-slim
 
-WORKDIR /app
+WORKDIR /home
 
 # 2. System Dependencies
 RUN apt-get update && apt-get install -y \
@@ -23,5 +23,5 @@ RUN echo "===== CHECKING REQUIREMENTS =====" && \
 COPY . .
 
 # 6. Runtime Config
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/home
 CMD ["python", "app/train.py"]
