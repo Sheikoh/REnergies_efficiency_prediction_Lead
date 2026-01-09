@@ -304,7 +304,7 @@ with DAG(
 
     # 4. Define the Execution Order (The Graph)
     # We explicitly chain them to ensure they appear in the UI
-    github_signal >> create_ec2
+    #github_signal >> create_ec2
 
     # Note: The data dependencies above (passing variables) technically imply order,
     # but adding explicit bitshift (>>) guarantees the graph renders correctly.
