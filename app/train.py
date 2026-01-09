@@ -739,6 +739,6 @@ if __name__ == "__main__":
             name="standard_scaler_linear_regression",
             input_example=input_example,
             signature=signature,
-            code_paths=["app/func_feat_eng.py", "app/Model_func.py"]
+            
         )
 
