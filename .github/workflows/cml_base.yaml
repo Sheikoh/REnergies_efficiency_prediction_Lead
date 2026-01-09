@@ -2,12 +2,13 @@ name: Continuous Training Pipeline
 
 on:
   push:
-    branches: [main]
+    path:
+      - code/02_Modeles/train.py
   pull_request:
     branches: [main]
   repository_dispatch:
     types: [trigger-training]
-  workflow_dispatch:
+  workflow-dispatch:
 
 jobs:
   # ==============================================================================
@@ -34,6 +35,8 @@ jobs:
           docker tag $IMAGE_ID:${{ github.sha }} $IMAGE_ID:latest
 
       - name: Run Tests in Docker
+        env: 
+          PYTHONPATH: ${{ github.workspace }}
         # We test the EXACT image we just built. 
         # If this fails, we never push to Docker Hub.
         run: |
