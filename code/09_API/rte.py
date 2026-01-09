@@ -11,6 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from fastapi.responses import StreamingResponse
 import csv
 import io
+import requests
 
 
 load_dotenv()
@@ -216,8 +217,42 @@ def rte_data(deb, fin, type):
         headers={"Content-Disposition": f"attachment; filename={type}.csv"}
     )
 
-"""
+def rte_daily_data(date):
+    date_str = datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
+    response = requests.get(f"https://eco2mix.rte-france.com/curves/eco2mixDl?date={date}")
+    response.raise_for_status()
+
+    with zipfile.ZipFile(io.BytesIO(response.content)) as zip_ref:
+        zip_ref.extractall(path)
+
+    # the file is supposed to be encoded in ISO-8859-1
+    df = pd.read_csv(f"{path}/eCO2mix_RTE_{date_str}.xls", encoding="ISO-8859-1", sep="\t", index_col=False)
+
+    df = df.iloc[:-1, :-1] #remove last line and last column
+    df["Heures"] = df["Heures"] + ":00"
+
+    df.to_excel(f"s3://renergies99-lead-bucket/public/raw/rte/daily/eCO2mix_RTE_{date_str}.xlsx")
+
+    df = df[~df["Heures"].astype(str).str.endswith(("15:00", "45:00"))]
+
+    # Colonnes à convertir en float (exclusions)
+    cols_float = [
+        c for c in df.columns
+        if c not in ["Périmètre","Nature","Date", "Heures"]
+    ]
+
+    # Conversion en float (les valeurs invalides deviennent NaN)
+    df[cols_float] = df[cols_float].apply(
+        lambda col: pd.to_numeric(col, errors="coerce")
+    )
+
+    # Convertir le DataFrame en CSV et résidant en mémoire
+    # csv_buffer = io.StringIO()
+    df.to_csv(f"s3://renergies99-lead-bucket/public/prod/daily/eCO2mix_RTE_{date_str}.csv", index=False, encoding="utf-8")
+
+    
 if __name__ == "__main__":
+    """
     if not is_rte_data_already_downloaded():
         previous_data = get_previous_rte_data()
         en_cours_data = en_cours_rte_data()
@@ -227,4 +262,6 @@ if __name__ == "__main__":
         df = pd.concat(previous_data, ignore_index=True)
 
         rte_df_to_csv(df)
-"""
+
+        rte_daily_data("08/01/2025")
+    """
