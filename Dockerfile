@@ -1,7 +1,7 @@
 # 1. Base Image
 FROM python:3.11-slim
 
-WORKDIR /app
+WORKDIR /home
 
 # 2. System Dependencies
 RUN apt-get update && apt-get install -y \
