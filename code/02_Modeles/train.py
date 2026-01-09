@@ -2,6 +2,7 @@
 
 import mlflow
 from mlflow.models.signature import infer_signature
+from mlflow import MlflowClient
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
@@ -14,6 +15,8 @@ import os
 
 import func_cleaning as fc
 
+load_dotenv()
+
 #---- VARIABLES ----
 weather_data_path = 'https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/openweathermap/merge_openweathermap_cleaned.csv'
 solar_data_path = 'https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/solar/raw_solar_data.csv'
@@ -23,6 +26,14 @@ prod_data_path = 'https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/pub
 target = 'tch_solaire_(%)'
 col_solar = ['Time', 'Ap', '10cm', 'K index Planetary'] # ALWAYS include a 'Time' column (used to merge datasets)
 cities_list = ['Moulins', 'Annecy', 'Nyons', 'Saint-Étienne', 'Aurillac']
+
+# Variables training
+os.environ["MLFLOW_TRACKING_URI"] = "https://renergies99lead-mlflow.hf.space/"
+EXPERIMENT_NAME = "renergie-lead"
+model_name = "standard_scaler_linear_regression"
+test_size = 0.25
+registered_model_name = "SolarProdModel"
+alias = "challenger"
 
 #---- Data Collection ----
 full_dataset = fc.create_full_dataset(weather_data_path, solar_data_path, landsat_data_path, prod_data_path, 
@@ -52,24 +63,18 @@ df_no_outliers = fc.remove_outliers(df_clean, target, method='iqr')
 print("Data cleaned")
 print(f'Dataset shape : {df_no_outliers.shape}')
 
-#------------------
-#---- TRAINING ----
-#------------------
+#------------------------------------------------------
+#---------------------- TRAINING ----------------------
+#------------------------------------------------------
 
 print("Training in progress....")
-
-# Variables
-load_dotenv()
-os.environ["MLFLOW_TRACKING_URI"] = "https://renergies99lead-mlflow.hf.space/"
-EXPERIMENT_NAME = "REnergie-lead"
-
 
 # Features and target definition
 X = df_no_outliers.drop(target, axis=1)
 y = df_no_outliers[target]
 
 x_train, x_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=24
+    X, y, test_size=test_size, random_state=24
 )
 
 input_example = x_train.iloc[:3]
@@ -130,15 +135,25 @@ with mlflow.start_run(experiment_id=experiment.experiment_id, description=run_de
     # Log params
     mlflow.log_param("scaler", "StandardScaler")
     mlflow.log_param("model", "LinearRegression")
-    mlflow.log_param("test_size", 0.3)
+    mlflow.log_param("test_size", test_size)
 
 
     # Log model
     mlflow.sklearn.log_model(
         pipeline,
-        name="standard_scaler_linear_regression",
+        name=model_name,
+        registered_model_name = registered_model_name,
         input_example=input_example,
         signature=signature,
         code_paths=["func_feat_eng.py", "Model_func.py"]
     )
 
+#--- Set registered model alias
+client = MlflowClient()
+
+model = client.get_registered_model(registered_model_name)
+latest_version = model.latest_versions[-1].version
+
+client.set_registered_model_alias(registered_model_name, alias, latest_version)
+print(f"Attribution de l'alias '{alias}' à la version {latest_version} du model {registered_model_name}")
+print("End of model training")
