@@ -18,6 +18,7 @@ RUN echo "===== CHECKING REQUIREMENTS =====" && \
     cat requirements.txt && \
     echo "=================================" && \
     pip install --no-cache-dir -r requirements.txt
+RUN pip install -i https://www.piwheels.org/simple pvlib
 
 # 5. Copy Application Code
 COPY . .
