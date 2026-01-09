@@ -175,11 +175,12 @@ df_nat = load_data()
 
 df_reg = load_rte_data()
 
-#load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_rte_data", "RTE")
-load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_openweathermap_forecasts", "OPENWEATHERMAP FORECASTS")
-load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_solar_data", "SOLAR FORECAST")
 
-call_predict()
+#load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_rte_data", "RTE")
+#load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_openweathermap_forecasts", "OPENWEATHERMAP FORECASTS")
+#load_api_data("https://renergies99lead-api-renergy-lead.hf.space/load_solar_data", "SOLAR FORECAST")
+
+#call_predict()
 
 # MODE 1 : DESCRIPTIF
 if mode == "Descriptif":
