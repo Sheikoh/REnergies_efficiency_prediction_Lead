@@ -4,10 +4,7 @@ on:
   push:
     path:
       - code/02_Modeles/train.py
-  pull_request:
-    branches: [main]
-  repository_dispatch:
-    types: [trigger-training]
+
   workflow-dispatch:
 
 jobs:
