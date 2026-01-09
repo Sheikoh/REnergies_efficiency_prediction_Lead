@@ -68,7 +68,7 @@ def get_daily_tch_solaire_regional(df_reg: pd.DataFrame) -> pd.DataFrame:
 def load_data():
     # Datasets
     #df_nat = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Annuel-Definitif.csv")
-    df_nat = pd.read_csv("https://renergies99lead-api-renergy-lead.hf.space/rte_data?deb=2020&fin=2026&type=rte_national")
+    df_nat = pd.read_csv(f"https://renergies99lead-api-renergy-lead.hf.space/rte_data?deb=2020&fin={datetime.now().strftime('%Y')}&type=rte_national")
     print("load_data load_data load_data", type(df_nat), df_nat.shape)
     df_nat_prep = prepare_df(df_nat, zone="France")
 
@@ -77,7 +77,7 @@ def load_data():
 def load_regional_data():
     # Datasets
     #df_reg = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Auvergne-Rhone-Alpes.csv")
-    df_reg = pd.read_csv("https://renergies99lead-api-renergy-lead.hf.space/rte_data?deb=2020&fin=2026&type=rte_regional")
+    df_reg = pd.read_csv(f"https://renergies99lead-api-renergy-lead.hf.space/rte_data?deb=2021&fin={datetime.now().strftime('%Y')}&type=rte_regional")
     df_reg_prep = prepare_df(df_reg, zone="Auvergne-Rhône-Alpes")
 
     return df_reg_prep

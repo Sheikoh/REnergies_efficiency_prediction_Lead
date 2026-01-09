@@ -25,6 +25,9 @@ class RteType(str, Enum):
 
 bucket = af.session_boto()
 
+MLFLOW_TRACKING_URI = "https://renergies99lead-mlflow.hf.space/"
+
+"""
 # Set tracking URI to your Hugging Face application
 mlflow.set_tracking_uri("https://renergies99lead-mlflow.hf.space/")
 
@@ -37,6 +40,7 @@ mlflow.set_experiment(EXPERIMENT_NAME)
 # Get our experiment info
 experiment = mlflow.get_experiment_by_name(EXPERIMENT_NAME)
 # mlflow.sklearn.autolog()
+"""
 
 description = """
 
@@ -144,6 +148,7 @@ async def predict():
     """
     Prediction of the Renewable Energies based on the input data 
     """
+    mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
     # Set your variables for your environment
     EXPERIMENT_NAME="REnergie-lead"
@@ -223,6 +228,8 @@ async def predict(file: UploadFile= File(...)):
     # Read data 
     # data_employee = pd.DataFrame([prediction_data])
 
+    mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+
     # Log model from mlflow 
     logged_model = 'runs:/51febeee1eb74612b4492dd0e4c8169e/pipeline_model'
 
@@ -287,6 +294,14 @@ async def rte_data(
     Get RTE data for dashboard
     """
     return rte.rte_data(deb, fin, type.value)
+
+@app.get("/rte_daily_data", 
+         tags=["RTE"],
+         summary="RTE get daily data")
+async def rte_daily_data(
+    date: str = Query(getNow(), description="Day to download in format DD/MM/YYYY")
+    ):
+    return rte.rte_daily_data(date)
 
 @app.get("/load_openweathermap_forecasts", tags=["Openweathermap"])
 async def load_openweathermap_forecasts():
