@@ -1,5 +1,5 @@
 # 1. Base Image
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 WORKDIR /home
 
@@ -18,7 +18,7 @@ RUN echo "===== CHECKING REQUIREMENTS =====" && \
     cat requirements.txt && \
     echo "=================================" && \
     pip install --no-cache-dir -r requirements.txt
-RUN pip install -i https://www.piwheels.org/simple pvlib
+RUN pip install -i https://www.piwheels.org/simple pvlib-python
 
 # 5. Copy Application Code
 COPY . .
