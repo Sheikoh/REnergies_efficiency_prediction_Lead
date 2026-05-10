@@ -30,42 +30,30 @@ MLFLOW_TRACKING_URI = "https://renergies99lead-mlflow.hf.space/"
 """
 # Set tracking URI to your Hugging Face application
 mlflow.set_tracking_uri("https://renergies99lead-mlflow.hf.space/")
-
 # TODO: Remove mlflow at startup ?
 # Set your variables for your environment
 EXPERIMENT_NAME="Default"
 # Set experiment's info 
 mlflow.set_experiment(EXPERIMENT_NAME)
-
 # Get our experiment info
 experiment = mlflow.get_experiment_by_name(EXPERIMENT_NAME)
 # mlflow.sklearn.autolog()
 """
 
 description = """
-
 Description to be redone
 Welcome to Jedha demo API. This app is made for you to understand how FastAPI works! Try it out 🕹️
-
 ## Introduction Endpoints
-
 Here are two endpoints you can try:
 * `/`: **GET** request that display a simple default message.
 * `/greetings`: **GET** request that display a "hello message"
-
 ## Blog Endpoints
-
 Imagine this API deals with blog articles. With the following endpoints, you can retrieve and create blog posts 
 * `/blog-articles/{blog_id}`: **GET** request that retrieve a blog article given a `blog_id` as `int`.
 * `/create-blog-article`: POST request that creates a new article
-
 ## Machine Learning
-
 This is a Machine Learning endpoint that predict salary given some years of experience. Here is the endpoint:
-
 * `/predict` that accepts `floats`
-
-
 Check out documentation below 👇 for more information on each endpoint. 
 """
 
@@ -295,6 +283,7 @@ async def rte_data(
     """
     return rte.rte_data(deb, fin, type.value)
 
+"""
 @app.get("/rte_daily_data", 
          tags=["RTE"],
          summary="RTE get daily data")
@@ -302,6 +291,29 @@ async def rte_daily_data(
     date: str = Query(getNow(), description="Day to download in format DD/MM/YYYY")
     ):
     return rte.rte_daily_data(date)
+"""
+
+@app.post("/rte_extract", 
+         tags=["RTE"],
+         summary="RTE get daily data and put in S3")
+async def rte_extract():
+    pass
+
+@app.post("/rte_transform",
+         tags=["RTE"],
+         summary="RTE clean / update data and put in S3")
+async def rte_transform(
+    extract_id: str = Query(..., description="id of the extraction")
+    ):
+    pass
+
+@app.post("/rte_load",
+         tags=["RTE"],
+         summary="RTE Put data in database")
+async def rte_load(
+    transform_id: str = Query(..., description="id of the transform")
+    ):
+    pass
 
 @app.get("/load_openweathermap_forecasts", tags=["Openweathermap"])
 async def load_openweathermap_forecasts():

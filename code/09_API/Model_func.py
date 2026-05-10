@@ -21,7 +21,7 @@ import pvlib
 
 #--------------COLLECT DATA FUNCTIONS---------------------------------------
 #---Prod
-def data_collection_prod(url='https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Auvergne-Rhone-Alpes_cleaned.csv'):
+def data_collection_prod(url='https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/prod/eCO2mix_RTE_Auvergne-Rhone-Alpes_cleaned.csv'):
 
     # read csv
     df_prod = pd.read_csv(url)
@@ -32,7 +32,7 @@ def data_collection_prod(url='https://renergies99-lead-bucket.s3.eu-west-3.amazo
     return data_prod
 
 #--Solar
-def data_coll_solar(url='https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/solar/raw_solar_data.csv'):
+def data_coll_solar(url='https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/solar/raw_solar_data.csv'):
      # read csv
     df_solar = pd.read_csv(url)
     data_solar = df_solar.copy()
@@ -45,7 +45,7 @@ def data_coll_solar(url='https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.
     return data_solar
 
 #---LandSat
-def data_coll_landsat(url ='https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/LandSat/result_EarthExplorer_region_ARA.csv'):
+def data_coll_landsat(url ='https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/LandSat/result_EarthExplorer_region_ARA.csv'):
 
     # read csv
     df_sat = pd.read_csv(url, encoding='ISO-8859-1', sep=';')
@@ -61,7 +61,7 @@ def data_coll_landsat(url ='https://renergies99-lead-bucket.s3.eu-west-3.amazona
     return data_sat
 
 #---OpenWeather
-def data_coll_weather(url ='https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/openweathermap/merge_openweathermap_cleaned.csv'):
+def data_coll_weather(url ='https://renergies99-bucket.s3.eu-west-3.amazonaws.com/public/openweathermap/merge_openweathermap_cleaned.csv'):
     # read csv
     df_weather = pd.read_csv(url)
     data_weather = df_weather.copy()
@@ -158,20 +158,22 @@ def merge_weather_dfs_by_city(dict_dfs_cities):
         df = add_day_length_column(df, city)
 
         df_prefixed = df.rename(columns={col: f"{city}_{col}" for col in df.columns if col != 'Time'})
+        df_prefixed["Time"] = df_prefixed["Time"].dt.normalize() + pd.Timedelta(hours=12)
 
         # Merge with inner joint
         if merged_df is None:
             merged_df = df_prefixed
         else:
             merged_df = pd.merge(merged_df, df_prefixed, on='Time', how='inner')
-
     merged_df = merged_df.sort_values('Time').reset_index(drop=True)
+
     return merged_df
 
 def data_collection_weather(data_path):
     weather_data = data_coll_weather(data_path)
     dfs_by_city = split_data_weather_by_city(weather_data)
     collected_data = merge_weather_dfs_by_city(dfs_by_city)
+    
     return collected_data
 
 #---------------MERGE COLLECTED DATA------------------------------
@@ -375,7 +377,7 @@ def model_training(model, x_train, x_test, y_train, y_test):
     # pour enregistrer dans MLFlow
     load_dotenv()
 
-    os.environ["APP_URI"] = "https://renergies99lead-mlflow.hf.space/"
+    os.environ["APP_URI"] = "https://renergies99-mlflow.hf.space/"
     EXPERIMENT_NAME="first_landsat_models"
 
     mlflow.set_tracking_uri(os.environ["APP_URI"])
@@ -439,7 +441,7 @@ def log_json_artifact(data, filename):
 last_download_filename = "predi_last_download"
 API_KEY_S3 = os.environ["AWS_ACCESS_KEY_ID"]
 API_SECRET_KEY_S3 = os.environ["AWS_SECRET_ACCESS_KEY"]
-bucket = "renergies99-lead-bucket"
+bucket = "renergies99-bucket"
 
 def s3_cred():
     load_dotenv()
