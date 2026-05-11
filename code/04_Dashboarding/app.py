@@ -49,7 +49,7 @@ def prepare_df(df, zone):
 
     return df
 
-COL_TCH = "TCH_Solaire____"  # nom exact de la variable dans df_reg
+COL_TCH = "TCH Solaire (%)"  # nom exact de la variable dans df_reg
 
 def get_daily_tch_solaire_regional(df_reg: pd.DataFrame) -> pd.DataFrame:
     """Historique quotidien de TCH Solaire (%) pour Auvergne-Rhône-Alpes."""
