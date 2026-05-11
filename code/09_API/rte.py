@@ -191,16 +191,12 @@ def rte_data(deb, fin, type):
             
             selected_columns = [col for col in desired if col in columns]
 
-            print(selected_columns)
-
             sql = f"""
                 SELECT {', '.join('"' + c + '"' for c in selected_columns)}
                 FROM public.{type}
                 WHERE EXTRACT(YEAR FROM TO_DATE("Date", 'YYYY-MM-DD')) between :deb and :fin 
                 ORDER BY "Date", "Heures"
             """
-
-            print(sql)
 
             result = conn.execute(
                 text(sql),
