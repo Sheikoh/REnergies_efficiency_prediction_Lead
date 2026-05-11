@@ -121,7 +121,7 @@ async def data_prep(urls: dict):
     weather_df = mf.data_collection_weather(urls["urls"][1])
     data_df = mf.merge_weather_solar_data(weather_df, solar_df)
 
-    cols = data_df.select_dtypes(include="int64").columns.to_list()
+    cols = data_df.select_dtypes(include="number").columns.to_list()
     data_df[cols] = data_df[cols].astype(float)
 
     data_df
