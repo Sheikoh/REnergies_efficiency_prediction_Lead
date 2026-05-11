@@ -107,7 +107,8 @@ def get_previous_rte_data():
         "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2021.xls",
         "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2022.xls",
         "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2023.xls",
-        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2024.xls"
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2024.xls",
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2025.xls"
     ]
 
     df_array = []
