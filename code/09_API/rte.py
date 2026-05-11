@@ -187,7 +187,7 @@ def rte_data(deb, fin, type):
             columns = [col[0] for col in columns]
 
             desired = ["Date", "Heures", "Nucleaire", "Gaz", "Charbon", "Fioul", 
-                   "Hydraulique", "Eolien", "Solaire", "Bioenergies", "Consommation", "Ech__physiques", "Taux_de_Co2"]
+                   "Hydraulique", "Eolien", "Solaire", "Bioenergies", "Consommation", "Ech__physiques", "TCH_Solaire____"]
             
             selected_columns = [col for col in desired if col in columns]
 
