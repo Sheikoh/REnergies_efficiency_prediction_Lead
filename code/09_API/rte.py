@@ -187,9 +187,11 @@ def rte_data(deb, fin, type):
             columns = [col[0] for col in columns]
 
             desired = ["Date", "Heures", "Nucleaire", "Gaz", "Charbon", "Fioul", 
-                   "Hydraulique", "Eolien", "Solaire", "Bioenergies", "Consommation", "Ech__physiques", "TCH_Solaire____"]
+                   "Hydraulique", "Eolien", "Solaire", "Bioenergies", "Consommation", "Ech__physiques", "Taux_de_Co2", "TCH_Solaire____"]
             
             selected_columns = [col for col in desired if col in columns]
+
+            print(selected_columns)
 
             sql = f"""
                 SELECT {', '.join('"' + c + '"' for c in selected_columns)}
@@ -198,7 +200,7 @@ def rte_data(deb, fin, type):
                 ORDER BY "Date", "Heures"
             """
 
-
+            print(sql)
 
             result = conn.execute(
                 text(sql),
