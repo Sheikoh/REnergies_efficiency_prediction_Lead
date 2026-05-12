@@ -107,7 +107,8 @@ def get_previous_rte_data():
         "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2021.xls",
         "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2022.xls",
         "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2023.xls",
-        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2024.xls"
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2024.xls",
+        "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prod/unzipped/regional/eCO2mix_RTE_Auvergne-Rh%C3%B4ne-Alpes_Annuel-Definitif_2025.xls"
     ]
 
     df_array = []
@@ -187,7 +188,7 @@ def rte_data(deb, fin, type):
             columns = [col[0] for col in columns]
 
             desired = ["Date", "Heures", "Nucleaire", "Gaz", "Charbon", "Fioul", 
-                   "Hydraulique", "Eolien", "Solaire", "Bioenergies", "Consommation", "Ech__physiques", "Taux_de_Co2"]
+                   "Hydraulique", "Eolien", "Solaire", "Bioenergies", "Consommation", "Ech__physiques", "Taux_de_Co2", "TCH_Solaire____"]
             
             selected_columns = [col for col in desired if col in columns]
 
@@ -197,8 +198,6 @@ def rte_data(deb, fin, type):
                 WHERE EXTRACT(YEAR FROM TO_DATE("Date", 'YYYY-MM-DD')) between :deb and :fin 
                 ORDER BY "Date", "Heures"
             """
-
-
 
             result = conn.execute(
                 text(sql),
