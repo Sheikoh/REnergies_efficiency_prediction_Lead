@@ -1,21 +1,27 @@
 import os
 import tempfile
 from datetime import datetime, timedelta
- 
+
 import boto3
 import pandas as pd
 from airflow import DAG
-from airflow.providers.standard.operators.python import BranchPythonOperator, PythonOperator
+from airflow.providers.standard.operators.python import (
+    BranchPythonOperator,
+    PythonOperator,
+)
 from airflow.providers.standard.operators.trigger_dagrun import TriggerDagRunOperator
-
- 
+from dotenv import load_dotenv
 from evidently import Report
 from evidently.presets import DataDriftPreset, DataSummaryPreset
-
 
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
+
+load_dotenv()
+
+AWS_ACCESS_KEY_ID_ML = os.environ["AWS_ACCESS_KEY_ID_ML"]
+AWS_SECRET_ACCESS_KEY_ML = os.environ["AWS_SECRET_ACCESS_KEY_ML"]
 
 S3_BUCKET       = "renergies99-lead-bucket"
 S3_PREFIX       = "public/drift-reports"
@@ -136,7 +142,10 @@ def task_save_report(ti=None):
     s3_key    = f"{S3_PREFIX}/{run_stamp}/{report_filename}"
  
     # --- Save to S3 ---
-    s3 = boto3.client("s3", region_name="eu-west-3")
+    s3 = boto3.client("s3", 
+                      aws_access_key_id=AWS_ACCESS_KEY_ID_ML,
+                      aws_secret_access_key=AWS_SECRET_ACCESS_KEY_ML,
+                      region_name="eu-west-3")
     s3.upload_file(report_path, S3_BUCKET, s3_key)
  
     # Attach retraining decision as S3 object metadata
