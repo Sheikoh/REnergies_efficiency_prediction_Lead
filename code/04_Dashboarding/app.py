@@ -18,6 +18,7 @@ def prepare_df(df, zone):
     # datetime
     df["datetime"] = pd.to_datetime(
         df["Date"] + " " + df["Heures"],
+        format="%Y-%m-%d %H:%M",
         errors="coerce"
     )
     df = df.sort_values("datetime")
@@ -61,7 +62,7 @@ def get_daily_tch_solaire_regional(df_reg: pd.DataFrame) -> pd.DataFrame:
         .groupby("Date", as_index=False)[COL_TCH]
         .mean()
     )
-    df_daily["Date"] = pd.to_datetime(df_daily["Date"])
+    df_daily["Date"] = pd.to_datetime(df_daily["Date"], format="%Y-%m-%d")
     df_daily["type"] = "Historique"
     return df_daily
 
@@ -125,7 +126,7 @@ def load_predictions_file() -> pd.DataFrame:
     # WARNING : A adapter avec le chemin vers le fichier sur le S3
     df_pred = pd.read_csv("https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/prediction/pred_tch_solaire_rhone_alpes.csv")
 
-    df_pred["Date"] = pd.to_datetime(df_pred["Date"], errors="coerce")
+    df_pred["Date"] = pd.to_datetime(df_pred["Date"], format="%Y-%m-%d", errors="coerce")
 
     # Harmonisation du nom de la colonne de prédiction
     if COL_TCH in df_pred.columns:
@@ -240,7 +241,7 @@ if mode == "Descriptif":
                      .groupby(["Date", "zone"], as_index=False)["Consommation"]
                      .mean()
         )
-        df_daily["Date"] = pd.to_datetime(df_daily["Date"], errors="coerce")
+        df_daily["Date"] = pd.to_datetime(df_daily["Date"], format="%Y-%m-%d", errors="coerce")
 
         if vue == "Comparaison":
             fig = px.line(
@@ -469,7 +470,7 @@ if mode == "Descriptif":
                           .mean()
                           .dropna()
             )
-            df_ech["Date"] = pd.to_datetime(df_ech["Date"], errors="coerce")
+            df_ech["Date"] = pd.to_datetime(df_ech["Date"], format="%Y-%m-%d", errors="coerce")
 
             if vue == "Comparaison":
                 fig_ech = px.line(
