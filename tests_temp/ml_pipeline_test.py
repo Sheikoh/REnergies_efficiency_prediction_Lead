@@ -4,7 +4,7 @@ import numpy as np
 from unittest.mock import patch
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestRegressor
-from app.train import load_data, preprocess_data, create_pipeline, train_model
+from app_temp.train import load_data, preprocess_data, create_pipeline, train_model
 
 # ==========================================
 # 1. FIXTURES (Reusable Dummy Data)
