@@ -27,7 +27,7 @@ jobs:
         run: |
           IMAGE_ID=${{ secrets.DOCKER_USERNAME }}/sample-ml-workflow
           
-          docker build -t $IMAGE_ID:${{ github.sha }} .
+          docker build --no-cache -t $IMAGE_ID:${{ github.sha }} .
           docker tag $IMAGE_ID:${{ github.sha }} $IMAGE_ID:latest
 
       - name: Run Tests in Docker
