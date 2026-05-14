@@ -15,5 +15,5 @@ pytest==8.2.0
 pvlib
 plotly
 matplotlib
-sklearn
+scikit-learn
 boto3
