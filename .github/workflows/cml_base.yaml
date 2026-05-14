@@ -37,6 +37,9 @@ jobs:
         # If this fails, we never push to Docker Hub.
         run: |
           IMAGE_ID=${{ secrets.DOCKER_USERNAME }}/sample-ml-workflow
+
+          # Debug: show what's actually in the container
+          docker run --rm $IMAGE_ID:${{ github.sha }} find /home -type f
           
           docker run --rm \
             -e MLFLOW_TRACKING_URI="file:///tmp/mlruns" \
