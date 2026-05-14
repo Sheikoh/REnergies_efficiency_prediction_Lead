@@ -22,11 +22,12 @@ RUN pip install --extra-index-url https://www.piwheels.org/simple pvlib
 
 # 5. Copy Application Code
 # COPY . .
-COPY code/09_API/tests/test_api.py /home/tests/test_api.py
-# COPY code/__init__.py /home/tests/__init__.py
+COPY code/09_API/ /home/
+# COPY code/09_API/tests/test_api.py /home/tests/test_api.py
+# # COPY code/__init__.py /home/tests/__init__.py
 
-COPY code/09_API/app.py /home/app.py
-# COPY code/__init__.py /home/__init__.py
+# COPY code/09_API/app.py /home/app.py
+# # COPY code/__init__.py /home/__init__.py
 
 # 6. Runtime Config
 ENV PYTHONPATH=/home
