@@ -44,6 +44,8 @@ jobs:
           
           docker run --rm \
             -e MLFLOW_TRACKING_URI="file:///tmp/mlruns" \
+            -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
             $IMAGE_ID:${{ github.sha }} \
             python -m pytest tests/test_api.py
 
