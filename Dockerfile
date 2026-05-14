@@ -21,7 +21,9 @@ RUN echo "===== CHECKING REQUIREMENTS =====" && \
 RUN pip install --extra-index-url https://www.piwheels.org/simple pvlib
 
 # 5. Copy Application Code
-COPY . .
+# COPY . .
+COPY code/09_API/tests/test_api.py /app/tests/test_api.py
+COPY code/09_API/app.py /app/app.py
 
 # 6. Runtime Config
 ENV PYTHONPATH=/home

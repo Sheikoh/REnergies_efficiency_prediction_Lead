@@ -2,7 +2,7 @@ name: Continuous Training Pipeline
 
 on:
   push:
-    path:
+    paths:
       - code/02_Modeles/train.py
 
 
