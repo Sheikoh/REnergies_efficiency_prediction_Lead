@@ -19,9 +19,9 @@ load_dotenv()
 path = "unzip"
 last_download_filename = "rte_last_download"
 
-API_KEY_S3 = os.environ["AWS_ACCESS_KEY_ID"]
-API_SECRET_KEY_S3 = os.environ["AWS_SECRET_ACCESS_KEY"]
-DATABASE_URL = os.environ["DATABASE_URL"]
+API_KEY_S3 = os.environ.get("AWS_ACCESS_KEY_ID")
+API_SECRET_KEY_S3 = os.environ.get("AWS_SECRET_ACCESS_KEY")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 bucket = "renergies99-lead-bucket"
 
