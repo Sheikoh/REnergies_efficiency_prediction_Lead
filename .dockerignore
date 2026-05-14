@@ -1,0 +1,5 @@
+*
+!requirements.txt
+!code/09_API/app.py
+!code/09_API/tests/test_api.py
+!code/09_API/tests/data/
