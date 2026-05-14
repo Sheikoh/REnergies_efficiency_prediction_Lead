@@ -13,7 +13,8 @@ boto3==1.34.100
 pytest==8.2.0
 
 pvlib
+seaborn
 plotly
 matplotlib
-scikit-learn
+# scikit-learn
 boto3
