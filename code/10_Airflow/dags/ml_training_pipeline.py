@@ -31,8 +31,8 @@ SECURITY_GROUP_ID = os.getenv("SECURITY_GROUP_ID")
 INSTANCE_TYPE = os.getenv("INSTANCE_TYPE", "t3.small")
 
 # Connection (Direct Env Vars)
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID_ML")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY_ML")
 REGION_NAME = os.getenv("AWS_DEFAULT_REGION", "eu-west-3")
 
 # MLFlow Config

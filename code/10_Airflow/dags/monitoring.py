@@ -25,7 +25,7 @@ AWS_SECRET_ACCESS_KEY_ML = os.environ["AWS_SECRET_ACCESS_KEY_ML"]
 
 S3_BUCKET       = "renergies99-lead-bucket"
 S3_PREFIX       = "public/drift-reports"
-DRIFT_THRESHOLD = 0.3   # retrain if >30% of columns have drifted
+DRIFT_THRESHOLD = 0.1   # retrain if >30% of columns have drifted
 DATE_COL        = "Date"
 
 PATH = "https://renergies99-lead-bucket.s3.eu-west-3.amazonaws.com/public/"
@@ -200,7 +200,7 @@ with DAG(
  
     retrain_model = TriggerDagRunOperator(
         task_id="retrain_model",
-        trigger_dag_id="your_retraining_dag_id",   # replace with your retraining DAG's dag_id
+        trigger_dag_id="github_ec2_ml_training",   # replace with your retraining DAG's dag_id
         wait_for_completion=False,                  # set True to wait for retraining to finish
         conf={"triggered_by": "drift_monitoring"},  # passed to the retraining DAG via dag_run.conf
     )

@@ -23,7 +23,7 @@ jobs:
           AIRFLOW_URL: ${{ secrets.AIRFLOW_URL }}
           AIRFLOW_USER: ${{ secrets.AIRFLOW_USERNAME }}
           AIRFLOW_PASS: ${{ secrets.AIRFLOW_PASSWORD }}
-          DAG_ID: "model_train"
+          DAG_ID: "github_ec2_ml_training"
         run: |
           # Run the python script, passing the commit hash as an argument
           python code/02_Modeles/train.py ${{ github.sha }}
