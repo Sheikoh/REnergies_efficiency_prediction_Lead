@@ -4,7 +4,6 @@ on:
   push:
     path:
       - code/02_Modeles/train.py
-
   workflow-dispatch:
 
 jobs:
