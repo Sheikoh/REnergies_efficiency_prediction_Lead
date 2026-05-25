@@ -7,17 +7,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  train_model:
+  trigger-airflow:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       
       - name: Install Python Dependencies
-        uses: pip install requests
+        run: pip install requests
 
-
-      - name: Trigger Airflow Training DAG
+      - name: Trigger Airflow DAG
         env:
           AIRFLOW_URL: ${{ secrets.AIRFLOW_URL }}
           AIRFLOW_USER: ${{ secrets.AIRFLOW_USERNAME }}
@@ -25,5 +25,5 @@ jobs:
           DAG_ID: "github_ec2_ml_training"
         run: |
           # Run the python script, passing the commit hash as an argument
-          python code/02_Modeles/train.py ${{ github.sha }}
-  
+          python scripts/trigger_airflow.py ${{ github.sha }}
+
