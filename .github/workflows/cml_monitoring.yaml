@@ -1,4 +1,4 @@
-name: Continuous Training Pipeline
+name: Continuous Monitoring Pipeline
 
 on:
   push:
