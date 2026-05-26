@@ -97,48 +97,48 @@ with DAG(
     # ------------------------------------------------------------------
     # TASK 1: Poll GitHub Actions Status
     # ------------------------------------------------------------------
-    @task
-    def wait_for_github_ci():
-        if not GITHUB_TOKEN or not GITHUB_REPO:
-            raise ValueError("Missing GITHUB_PAT or GITHUB_REPO env vars")
+    # @task
+    # def wait_for_github_ci():
+    #     if not GITHUB_TOKEN or not GITHUB_REPO:
+    #         raise ValueError("Missing GITHUB_PAT or GITHUB_REPO env vars")
 
-        api_url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs"
-        headers = {
-            "Authorization": f"Bearer {GITHUB_TOKEN}",
-            "Accept": "application/vnd.github.v3+json"
-        }
-        params = {"branch": BRANCH_NAME, "status": "completed", "per_page": 1}
+    #     api_url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs"
+    #     headers = {
+    #         "Authorization": f"Bearer {GITHUB_TOKEN}",
+    #         "Accept": "application/vnd.github.v3+json"
+    #     }
+    #     params = {"branch": BRANCH_NAME, "status": "completed", "per_page": 1}
 
-        print(f"📡 Polling GitHub Actions for {GITHUB_REPO}...")
+    #     print(f"📡 Polling GitHub Actions for {GITHUB_REPO}...")
 
-        # Poll for 10 minutes (20 checks * 30 seconds)
-        for _ in range(20): 
-            try:
-                response = requests.get(api_url, headers=headers, params=params)
-                response.raise_for_status()
-                data = response.json()
+    #     # Poll for 10 minutes (20 checks * 30 seconds)
+    #     for _ in range(20): 
+    #         try:
+    #             response = requests.get(api_url, headers=headers, params=params)
+    #             response.raise_for_status()
+    #             data = response.json()
 
-                if not data['workflow_runs']:
-                    print("No workflow runs found yet.")
-                    time.sleep(30)
-                    continue
+    #             if not data['workflow_runs']:
+    #                 print("No workflow runs found yet.")
+    #                 time.sleep(30)
+    #                 continue
 
-                latest_run = data['workflow_runs'][0]
-                conclusion = latest_run['conclusion']
+    #             latest_run = data['workflow_runs'][0]
+    #             conclusion = latest_run['conclusion']
                 
-                print(f"🔎 Latest Run Conclusion: {conclusion}")
+    #             print(f"🔎 Latest Run Conclusion: {conclusion}")
 
-                if conclusion == 'success':
-                    print("✅ CI Passed!")
-                    return True
-                elif conclusion == 'failure':
-                    raise Exception("❌ Latest CI run failed!")
+    #             if conclusion == 'success':
+    #                 print("✅ CI Passed!")
+    #                 return True
+    #             elif conclusion == 'failure':
+    #                 raise Exception("❌ Latest CI run failed!")
                 
-            except Exception as e:
-                print(f"Polling error: {e}")
-                time.sleep(30)
+    #         except Exception as e:
+    #             print(f"Polling error: {e}")
+    #             time.sleep(30)
 
-        raise TimeoutError("Timed out waiting for GitHub CI.")
+    #     raise TimeoutError("Timed out waiting for GitHub CI.")
 
     # ------------------------------------------------------------------
     # TASK 2: Create EC2 Instance
@@ -291,7 +291,7 @@ with DAG(
     # ------------------------------------------------------------------
 
     # 1. Instantiate the TaskFlow tasks
-    github_signal = wait_for_github_ci()
+    # github_signal = wait_for_github_ci()
 
     # 2. Pass data from Standard Operator -> TaskFlow Task
     # CRITICAL FIX: Use 'create_ec2.output' to get the XComArg (Instance IDs)
