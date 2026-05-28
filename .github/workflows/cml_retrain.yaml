@@ -3,7 +3,7 @@ name: Continuous Training Pipeline
 on:
   push:
     path:
-      - code/02_Modeles/train.py
+      - code/02_Modeles/**
   workflow_dispatch:
 
 jobs:
