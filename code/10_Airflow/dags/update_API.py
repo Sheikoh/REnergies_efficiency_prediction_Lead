@@ -32,7 +32,7 @@ default_args = {
 with DAG(
     dag_id='sync_api_to_huggingface',
     default_args=default_args,
-    schedule=None,
+    schedule=None, #Only on trigger
     start_date=datetime(2024, 1, 1),
     catchup=False,
     tags=['huggingface', 'deploy'],

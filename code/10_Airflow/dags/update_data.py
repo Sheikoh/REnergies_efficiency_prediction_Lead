@@ -116,7 +116,7 @@ default_args = {
 
 with DAG(
     dag_id=DAG_ID,
-    schedule="0 5 * * *",  # <--- FIX: Changed from schedule_interval to schedule
+    schedule="0 5 * * *",  # everyday at 5 am
     default_args=default_args,
     catchup=False,
     tags=['API', 'data', 'prediction'],

@@ -88,7 +88,7 @@ default_args = {
 
 with DAG(
     dag_id=DAG_ID,
-    schedule=None,  # <--- FIX: Changed from schedule_interval to schedule
+    schedule=None,  # On trigger only
     default_args=default_args,
     catchup=False,
     tags=['github', 'ec2', 'ml-training'],

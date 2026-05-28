@@ -19,6 +19,8 @@ from enum import Enum
 # data = pd.read_excel("ibm_hr_attrition.xlsx", index_col=0)
 # model = joblib.load("model_ibm")
 
+# Test GA
+
 class RteType(str, Enum):
     national = "rte_national"
     regional = "rte_regional"
