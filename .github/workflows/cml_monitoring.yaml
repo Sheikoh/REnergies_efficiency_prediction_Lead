@@ -1,8 +1,8 @@
-name: Continuous Monitoring Pipeline
+name: Continuous API Monitoring Pipeline
 
 on:
   push:
-    paths:
+    path:
       - code/09_API
   workflow_dispatch:
 
